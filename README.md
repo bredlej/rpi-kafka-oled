@@ -19,7 +19,8 @@ The program will run until it receives an interrupt signal (CTRL+c), which will 
 * an OLED display connected to RPI - tested with [Waveshare 0.95 RGB OLED (A)](https://www.waveshare.com/wiki/0.95inch_RGB_OLED_(A))
 * a running [Apache Kafka](https://kafka.apache.org/) broker with a topic (or more), that the program can connect and subscribe to.
 
-RPI GPIO  -> OLED connection: (BCM numbers corresponding to https://pinout.xyz/#)
+### RPI GPIO  -> OLED connection
+See [GPIO Pinout guide](https://pinout.xyz/#) for reference.
 | GPIO      | OLED |
 |-----------|------|
 | 3v3       | VCC  |
