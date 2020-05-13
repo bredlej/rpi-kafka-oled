@@ -31,6 +31,7 @@ RPI GPIO  -> OLED connection: (BCM numbers corresponding to https://pinout.xyz/#
 | MISO (19) | RES  |
 
 ## Demo:
+
 [YouTube video showing what it looks like in action](https://www.youtube.com/watch?v=azisqt7O75k)
 
 ## Author
@@ -40,3 +41,7 @@ RPI GPIO  -> OLED connection: (BCM numbers corresponding to https://pinout.xyz/#
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Picture
+
+![Picture of running program](/image.jpg)
