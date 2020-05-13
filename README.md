@@ -1,13 +1,13 @@
-# alivetest
+# rpi-kafka-oled
 Raspberry Pi project - consumes messages from a Kafka broker and displays the latest message text to a OLED display.
 
 ## Getting Started
 
 ```
-git clone https://github.com/bredlej/alivetest.git
-cd alivetest
+git clone https://github.com/bredlej/rpi-kafka-oled.git
+cd rpi-kafka-oled
 make
-./alivetest <broker:port> <group-id> <topic 1> <topic 2> ... <topic N>
+./rpi-kafka-oled <broker:port> <group-id> <topic 1> <topic 2> ... <topic N>
 ```
 The program will run until it receives an interrupt signal (CTRL+c), which will cause the Kafka consumer to stop and turn off the display.
 
