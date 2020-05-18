@@ -30,9 +30,10 @@
 #define TYPE_3_STAR_SPEED 0.007f
 #define TYPE_1_STAR_CHANCE 100
 #define TYPE_3_STAR_CHANCE 500
+#define MIN_TEMP_Y 12
 #define MAX_TEMP_Y 48
-#define TEMP_SCALE_MAX 60 
-#define TEMP_SCALE_MIN 40
+#define TEMP_SCALE_MIN 47
+#define TEMP_SCALE_MAX 57 
 
 #define DEVICE_LETO_KEY "leto"
 #define DEVICE_DUNCAN_KEY "duncan"
@@ -94,7 +95,7 @@ typedef struct KAFKA_CONSUMER_ARGS {
  */
 static int float_to_screen_y(const float temperature) 
 {
-	return OLED_HEIGHT - ((temperature - TEMP_SCALE_MIN) / (TEMP_SCALE_MAX - TEMP_SCALE_MIN) * MAX_TEMP_Y);
+	return 64 - (((temperature - TEMP_SCALE_MIN) / (TEMP_SCALE_MAX - TEMP_SCALE_MIN)) * (MAX_TEMP_Y - MIN_TEMP_Y)) - MIN_TEMP_Y;
 }
 
 /** 
@@ -118,7 +119,7 @@ static int init_background(BACKGROUND *background)
 	for (int i = 0; i < AMOUNT_STARS; i++) {
 		PARTICLE *star = &background->stars[i];
 		star->x = rand_range(0, OLED_WIDTH);
-		star->y = rand_range(0, MAX_TEMP_Y);
+		star->y = rand_range(0, OLED_HEIGHT);
 		int range = rand_range(0,1000);
 		if (range < TYPE_1_STAR_CHANCE) star->type = TYPE_1_STAR;
 		if (range >= TYPE_1_STAR_CHANCE && range < TYPE_3_STAR_CHANCE) star->type = TYPE_2_STAR;
@@ -143,17 +144,17 @@ int init_devices(DEVICE *devices)
 	strcpy(dev2->name, DEVICE_CHANI_NAME_SHORT);
 	strcpy(dev3->name, DEVICE_MUADDIB_NAME_SHORT);
 
-	dev0->temperature = 50.0f;
-	dev1->temperature = 50.0f;
-	dev2->temperature = 50.0f;
-	dev3->temperature = 50.0f;
+	dev0->temperature = 45.0f;
+	dev1->temperature = 45.0f;
+	dev2->temperature = 45.0f;
+	dev3->temperature = 45.0f;
 
 	// define colors for devices 0-3 (enum definition in ssd1331.h)
 	enum Color colors[] = {RED, BLUE, GREEN, YELLOW};
-	devices[0].rgb = colors[0];
-	devices[1].rgb = colors[1];
-	devices[2].rgb = colors[2];
-	devices[3].rgb = colors[3];
+	devices[0].rgb = colors[0]; //RGB(18,127,169); //colors[0]; // 18,127,169
+	devices[1].rgb = colors[1]; //RGB(75, 36, 143); //colors[1]; // 75, 36, 143
+	devices[2].rgb = colors[2]; //RGB(19, 27, 76); //colors[2]; // 19, 27, 76
+	devices[3].rgb = colors[3]; //RGB(0, 243, 197); //RGB(127, 64, 122); //colors[3]; // 0, 243, 197 || 127, 64, 122
    
 	dev0->temperature_particles = malloc(AMOUNT_PARTICLES * sizeof(PARTICLE)); //dev0particles;
 	dev1->temperature_particles = malloc(AMOUNT_PARTICLES * sizeof(PARTICLE)); // dev1particles;
@@ -250,7 +251,7 @@ int update_background(INSTANCE *instance, const float lag_ms)
 		 
 		if (star->x > OLED_WIDTH) {
 			star->x = rand_range(-15, 0);
-			star->y = rand_range(0, MAX_TEMP_Y);
+			star->y = rand_range(0, OLED_HEIGHT);
 		}
 	}
 	
