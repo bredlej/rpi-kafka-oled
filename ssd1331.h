@@ -88,6 +88,7 @@ void SSD1331_clear();
 void SSD1331_pixel(int x,int y, char color);
 void SSD1331_mono_bitmap(unsigned char x, unsigned char y, const unsigned char *pBmp, char chWidth, char chHeight, unsigned short hwColor);
 void SSD1331_bitmap24(unsigned char x, unsigned char y, unsigned char *pBmp, char chWidth, char chHeight);
+void SSD1331_string53(unsigned char x, unsigned char y, const char *pString, unsigned char Size, unsigned char Mode, unsigned short hwColor);
 void SSD1331_string(unsigned char x, unsigned char y, const char *pString, unsigned char Size, unsigned char Mode, unsigned short hwColor);
 void SSD1331_char1616(unsigned char x, unsigned char y, unsigned char chChar, unsigned short hwColor);
 void SSD1331_char3216(unsigned char x, unsigned char y, unsigned char chChar, unsigned short hwColor);
@@ -428,6 +429,104 @@ static const unsigned char Font3216[11][64] =
     0x0C,0x00,0x00,0x30,0x0F,0xF0,0x0F,0xF0,0x0F,0xF0,0x0F,0xF0,0x00,0x00,0x00,0x00,
     0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00}
 };    
+
+static const unsigned int Font0503[95] = {
+    0x0000,/*" ",0*/
+    0x0740,/*"!",1*/
+    0xC030,/*""",2*/
+    0xFABE,/*"#",3*/
+    0x66CC,/*"$",4*/
+    0x9932,/*"%",5*/
+    0x5556,/*"&",6*/
+    0x0060,/*"'",7*/
+    0x7440,/*"(",8*/
+    0x045C,/*")",9*/
+    0x5114,/*"*",10*/
+    0x2388,/*"+",11*/
+    0x00C0,/*",",12*/
+    0x0218,/*"-",13*/
+    0x0040,/*".",14*/
+    0x0BA0,/*"/",15*/
+    0x745C,/*"0",16*/
+    0x443E,/*"1",17*/
+    0xBD7A,/*"2",18*/
+    0x8D7E,/*"3",19*/
+    0xE11E,/*"4",20*/
+    0xED6E,/*"5",21*/
+    0xFD6E,/*"6",22*/
+    0x85F0,/*"7",23*/
+    0xFD7E,/*"8",24*/
+    0xE53E,/*"9",25*/
+    0x0280,/*":",26*/
+    0x0A80,/*";",27*/
+    0x22A2,/*"<",28*/
+    0x5294,/*"=",29*/
+    0x8A88,/*">",30*/
+    0x8578,/*"?",31*/
+    0xFC7A,/*"@",32*/
+    0x7D1E,/*"A",33*/
+    0xFD76,/*"B",34*/
+    0xFC62,/*"C",35*/
+    0xFC5C,/*"D",36*/
+    0xFD6A,/*"E",37*/
+    0xFD28,/*"F",38*/
+    0xFC6E,/*"G",39*/
+    0xF93E,/*"H",40*/
+    0x07C0,/*"I",41*/
+    0x107C,/*"J",42*/
+    0xF936,/*"K",43*/
+    0xF842,/*"L",44*/
+    0xFA3E,/*"M",45*/
+    0xFC1E,/*"N",46*/
+    0xFC7E,/*"O",47*/
+    0xFD38,/*"P",48*/
+    0xF4BE,/*"Q",49*/
+    0xFD36,/*"R",50*/
+    0x4D64,/*"S",51*/
+    0x87E0,/*"T",52*/
+    0xF87E,/*"U",53*/
+    0xF07C,/*"V",54*/
+    0xF8BE,/*"W",55*/
+    0xD936,/*"X",56*/
+    0xC1F0,/*"Y",57*/
+    0x9D72,/*"Z",58*/
+    0xFC40,/*"[",59*/
+    0x8382,/*"\",60*/
+    0x047E,/*"]",61*/
+    0x4410,/*"^",62*/
+    0x0842,/*"_",63*/
+    0x0820,/*"`",64*/
+    0x7D1E,/*"A",33*/
+    0xFD76,/*"B",34*/
+    0xFC62,/*"C",35*/
+    0xFC5C,/*"D",36*/
+    0xFD6A,/*"E",37*/
+    0xFD28,/*"F",38*/
+    0xFC6E,/*"G",39*/
+    0xF93E,/*"H",40*/
+    0x07C0,/*"I",41*/
+    0x107C,/*"J",42*/
+    0xF936,/*"K",43*/
+    0xF842,/*"L",44*/
+    0xFA3E,/*"M",45*/
+    0xFC1E,/*"N",46*/
+    0xFC7E,/*"O",47*/
+    0xFD38,/*"P",48*/
+    0xF4BE,/*"Q",49*/
+    0xFD36,/*"R",50*/
+    0x4D64,/*"S",51*/
+    0x87E0,/*"T",52*/
+    0xF87E,/*"U",53*/
+    0xF07C,/*"V",54*/
+    0xF8BE,/*"W",55*/
+    0xD936,/*"X",56*/
+    0xC1F0,/*"Y",57*/
+    0x9D72,/*"Z",58*/
+    0x26E2,/*"{",91*/
+    0x07C0,/*"|",92*/
+    0x8EC8,/*"}",93*/
+    0x3118,/*"~",94*/
+}; 
 
 static const unsigned char Bmp4016[96] =  //SUN
 {

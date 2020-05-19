@@ -30,8 +30,8 @@
 #define TYPE_3_STAR_SPEED 0.007f
 #define TYPE_1_STAR_CHANCE 100
 #define TYPE_3_STAR_CHANCE 500
-#define MIN_TEMP_Y 12
-#define MAX_TEMP_Y 48
+#define MIN_TEMP_Y 15
+#define MAX_TEMP_Y 53
 #define TEMP_SCALE_MIN 47
 #define TEMP_SCALE_MAX 57 
 
@@ -304,19 +304,22 @@ static int render_debug(const INSTANCE *instance)
 	DEVICE *device2 = &instance->devices[2];
 	DEVICE *device3 = &instance->devices[3];
 
-	char display_text[9];
+	char display_text[15];
+	
+	
+	SSD1331_string53(0, 20, "HELLO", 2, 1, RGB(253,253,253));
 
-	sprintf(display_text, "%s[%.1f]", device0->name, device0->temperature);
-	SSD1331_string(0, TOP_DEBUG_STRING_Y, display_text, 12, 1, device0->rgb);
+	sprintf(display_text, "%s %.1f", "LETO", device0->temperature);
+	SSD1331_string53(0, TOP_DEBUG_STRING_Y, display_text, 2, 1, device0->rgb);
 
-	sprintf(display_text, "%s[%.1f]", device1->name, device1->temperature);
-	SSD1331_string(48, TOP_DEBUG_STRING_Y, display_text, 12, 1, device1->rgb);
+	sprintf(display_text, "%s %.1f", "DUNCAN", device1->temperature);
+	SSD1331_string53(48, TOP_DEBUG_STRING_Y, display_text, 2, 1, device1->rgb);
 
-	sprintf(display_text, "%s[%.1f]", device2->name, device2->temperature);
-	SSD1331_string(0, BOTTOM_DEBUG_STRING_Y, display_text, 12, 1, device2->rgb);
+	sprintf(display_text, "%s %.1f", "CHANI", device2->temperature);
+	SSD1331_string53(0, BOTTOM_DEBUG_STRING_Y, display_text, 2, 1, device2->rgb);
 
-	sprintf(display_text, "%s[%.1f]", device3->name, device3->temperature);
-	SSD1331_string(48, BOTTOM_DEBUG_STRING_Y, display_text, 12, 1, device3->rgb);
+	sprintf(display_text, "%s %.1f", "MUADDIB", device3->temperature);
+	SSD1331_string53(48, BOTTOM_DEBUG_STRING_Y, display_text, 2, 1, device3->rgb);
 
 	return 1;
 }

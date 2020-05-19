@@ -119,6 +119,45 @@ void SSD1331_char1616(unsigned char x, unsigned char y, unsigned char chChar, un
     }
 }
 
+
+static void SSD1331_char53(unsigned char x, unsigned char y, char acsii, char size, char mode, unsigned short hwColor) {
+    unsigned char i, j, y0=y;
+    int temp;
+    unsigned char ch = acsii - ' ';
+    for(i = 0;i<1;i++) {
+		
+		temp = Font0503[ch];
+//		fprintf(stderr, "\nascii=[%c] temp=[%02X]\n", acsii, temp);
+		for(j =0;j<15;j++)
+        {
+            if(temp & 0x8000) {
+				SSD1331_draw_point(x, y, hwColor);
+//				fprintf(stderr, "x=[%d], y=[%d] => TRUE\n", x, y);
+			}
+            else { 
+				SSD1331_draw_point(x, y, 0);
+//				fprintf(stderr, "x=[%d], y=[%d] => FALSE\n", x, y);
+			}
+            temp <<=1;
+            y++;
+            if((j+1) % 5==0)
+            {
+                y = y0;
+                x ++;
+                continue;
+            }						
+        }
+    }
+}
+
+void SSD1331_string53(unsigned char x, unsigned char y, const char *pString, unsigned char Size, unsigned char Mode, unsigned short hwColor) {
+    while (*pString != '\0') {      
+
+        SSD1331_char53(x, y, *pString, Size, Mode, hwColor);
+        x += 4;
+        pString ++;
+    }
+}
 void SSD1331_char3216(unsigned char x, unsigned char y, unsigned char chChar, unsigned short hwColor) {
     unsigned char i, j;
     unsigned char chTemp = 0, y0 = y; 
