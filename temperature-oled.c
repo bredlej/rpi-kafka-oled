@@ -35,14 +35,10 @@
 #define TEMP_SCALE_MIN 47
 #define TEMP_SCALE_MAX 57 
 
-#define DEVICE_LETO_KEY "leto"
-#define DEVICE_DUNCAN_KEY "duncan"
-#define DEVICE_CHANI_KEY "chani"
-#define DEVICE_MUADDIB_KEY "muaddib"
-#define DEVICE_LETO_NAME_SHORT "LE"
-#define DEVICE_DUNCAN_NAME_SHORT "DU"
-#define DEVICE_CHANI_NAME_SHORT "CH"
-#define DEVICE_MUADDIB_NAME_SHORT "MU"
+#define DEVICE_0_KEY "leto"
+#define DEVICE_1_KEY "duncan"
+#define DEVICE_2_KEY "chani"
+#define DEVICE_3_KEY "muaddib"
 
 /** 
  * Global variable determining if main loop should run 
@@ -66,7 +62,7 @@ typedef struct PARTICLE {
 } PARTICLE;
 
 typedef struct DEVICE {
-	char name[2];
+	char name[10];
 	float temperature;
 	unsigned int rgb;
 	PARTICLE *temperature_particles;
@@ -139,10 +135,10 @@ int init_devices(DEVICE *devices)
 	DEVICE *dev2 = &devices[2];
 	DEVICE *dev3 = &devices[3];
 
-	strcpy(dev0->name, DEVICE_LETO_NAME_SHORT);
-   	strcpy(dev1->name, DEVICE_DUNCAN_NAME_SHORT);
-	strcpy(dev2->name, DEVICE_CHANI_NAME_SHORT);
-	strcpy(dev3->name, DEVICE_MUADDIB_NAME_SHORT);
+	strcpy(dev0->name, DEVICE_0_KEY);
+   	strcpy(dev1->name, DEVICE_1_KEY);
+	strcpy(dev2->name, DEVICE_2_KEY);
+	strcpy(dev3->name, DEVICE_3_KEY);
 
 	dev0->temperature = 45.0f;
 	dev1->temperature = 45.0f;
@@ -181,7 +177,6 @@ int update_temperature (DEVICE *device, float temperature)
 		current_temperature->y = previous_temperature->y;
 	}
 	device->temperature_particles[0].y = float_to_screen_y(device->temperature);
-//	sprintf(instance->debug_info.bottom, "%.1f'C", instance->temperature);
 	
 	return 1;	
 }
@@ -225,9 +220,6 @@ int init(INSTANCE *instance)
 		}	
 		update_temperature(device, device->temperature);
 	}
-
-	/* Write initial debug info */
-//	sprintf(instance->debug_info.bottom, "[]");
 
 	/* Turn on the OLED screen */
 	SSD1331_begin();
@@ -273,8 +265,7 @@ static int render_background(const INSTANCE *instance)
 }
 
 /**
- * Draw temperature chart.
- * TODO implement for devices sending messages to kafka.
+ * Draw temperature of the given DEVICE* as a line chart.
  */
 static int render_termometer(const DEVICE *device) 
 {
@@ -282,7 +273,6 @@ static int render_termometer(const DEVICE *device)
 	PARTICLE *previous_temperature;
 	for (int i = 0; i < AMOUNT_PARTICLES; i++) {
 		current_temperature = &device->temperature_particles[i];
-//		fprintf(stderr, "cur=[%0.1f]", current_temperature->x);
 	    previous_temperature = &device->temperature_particles[i < AMOUNT_PARTICLES - 1 ? i+1 : 0];
 		if (i < AMOUNT_PARTICLES - 1) {
 			SSD1331_line(current_temperature->x, current_temperature->y, 
@@ -306,16 +296,16 @@ static int render_debug(const INSTANCE *instance)
 
 	char display_text[15];
 	
-	sprintf(display_text, "%s %.1f", "LETO", device0->temperature);
+	sprintf(display_text, "%s %.1f", DEVICE_0_KEY, device0->temperature);
 	SSD1331_string53(0, TOP_DEBUG_STRING_Y, display_text, 2, 1, device0->rgb);
 
-	sprintf(display_text, "%s %.1f", "DUNCAN", device1->temperature);
+	sprintf(display_text, "%s %.1f", DEVICE_1_KEY, device1->temperature);
 	SSD1331_string53(48, TOP_DEBUG_STRING_Y, display_text, 2, 1, device1->rgb);
 
-	sprintf(display_text, "%s %.1f", "CHANI", device2->temperature);
+	sprintf(display_text, "%s %.1f", DEVICE_2_KEY, device2->temperature);
 	SSD1331_string53(0, BOTTOM_DEBUG_STRING_Y, display_text, 2, 1, device2->rgb);
 
-	sprintf(display_text, "%s %.1f", "MUADDIB", device3->temperature);
+	sprintf(display_text, "%s %.1f", DEVICE_3_KEY, device3->temperature);
 	SSD1331_string53(48, BOTTOM_DEBUG_STRING_Y, display_text, 2, 1, device3->rgb);
 
 	return 1;
@@ -425,7 +415,7 @@ void *consume_kafka_messages(void *vargp) {
 		/* Print the message value/payload. */
 		if (rkm->key && is_printable(rkm->key, rkm->key_len) && rkm->payload && is_printable(rkm->payload, rkm->len)) {
 			printf(" Value: %.*s\n", (int)rkm->len, (const char *)rkm->payload);
-			char key[4];
+			char key[10];
 			sprintf(key, "%.*s", (int)rkm->key_len, (const char *)rkm->key);
 			for (int i = 0; i < AMOUNT_DEVICES; i++) {
 				DEVICE *device = &devices[i];
