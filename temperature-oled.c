@@ -242,15 +242,15 @@ int update_background(INSTANCE *instance, const float lag_ms)
 {
 	for (int i = 0; i < AMOUNT_STARS; i++) {
 		PARTICLE *star = &instance->background->stars[i];
-		if (TYPE_1_STAR == star->type) star->x += TYPE_1_STAR_SPEED;
-		if (TYPE_2_STAR == star->type) star->x += TYPE_2_STAR_SPEED;
-		if (TYPE_3_STAR == star->type) star->x += TYPE_3_STAR_SPEED;
+		if (TYPE_1_STAR == star->type) star->x -= TYPE_1_STAR_SPEED;
+		if (TYPE_2_STAR == star->type) star->x -= TYPE_2_STAR_SPEED;
+		if (TYPE_3_STAR == star->type) star->x -= TYPE_3_STAR_SPEED;
 
 		/* If star goes out of the visible screen, put it somewhere on the left.
 		   Stars are being reused this way instead of deleting/creating them */
 		 
-		if (star->x > OLED_WIDTH) {
-			star->x = rand_range(-15, 0);
+		if (star->x < 0) {
+			star->x = rand_range(OLED_WIDTH, OLED_WIDTH + 15);
 			star->y = rand_range(0, OLED_HEIGHT);
 		}
 	}
@@ -306,9 +306,6 @@ static int render_debug(const INSTANCE *instance)
 
 	char display_text[15];
 	
-	
-	SSD1331_string53(0, 20, "HELLO", 2, 1, RGB(253,253,253));
-
 	sprintf(display_text, "%s %.1f", "LETO", device0->temperature);
 	SSD1331_string53(0, TOP_DEBUG_STRING_Y, display_text, 2, 1, device0->rgb);
 
@@ -387,7 +384,6 @@ void *consume_kafka_messages(void *vargp) {
 
 	struct KAFKA_CONSUMER_ARGS *args = (struct KAFKA_CONSUMER_ARGS *) vargp;
 	rd_kafka_t *rk = args->rk;
-	char *payload = args->payload;
 	DEVICE *devices = args->devices;	
 	signal(SIGINT, stop);
 	
