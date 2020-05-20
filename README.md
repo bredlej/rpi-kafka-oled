@@ -34,7 +34,7 @@ See [GPIO Pinout guide](https://pinout.xyz/#) for reference.
 ## Use-case examples:
 
 ### temperature-oled.c
-![Picture of temperature-oled](/image.jpg)
+![Picture of temperature-oled](/temperature-oled.jpg)
 
 Displays line chart of CPU temperatures of four devices in the network.
 The devices send their data as key-value pair to a Kafka topic, here: `device_name:cpu_temperature`.
